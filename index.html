@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#0f5132">
+<link rel="manifest" href="manifest.webmanifest">
+<title>地域限定旅行業務取扱管理者 過去問クイズ</title>
+<style>
+:root{--green:#0f5132;--pale:#eef8f2;--line:#d8e4dc;--red:#b42318;--blue:#175cd3}
+*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:#f7f8f8;color:#17201b}
+header{position:sticky;top:0;z-index:4;background:var(--green);color:white;padding:14px 16px 10px;box-shadow:0 2px 8px #0002}
+h1{font-size:18px;margin:0 0 8px}.sub{font-size:12px;opacity:.88}
+main{max-width:780px;margin:auto;padding:12px 12px 96px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px #0000000b}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:12px;font-weight:700;display:block;margin-bottom:5px}
+select,button{font:inherit}
+select{width:100%;padding:11px;border:1px solid #b9c8bf;border-radius:10px;background:white}
+.progress{height:9px;background:#e8eee9;border-radius:20px;overflow:hidden;margin-top:10px}.progress>div{height:100%;background:#2b8a57;width:0}
+.viewer{position:relative;background:#333;border-radius:12px;overflow:hidden}
+.viewer img{display:block;width:100%;height:auto;background:white}
+.pagebar{display:flex;align-items:center;gap:8px;padding:8px;background:#222;color:#fff}
+.pagebar button{padding:8px 12px;border:0;border-radius:9px;background:#fff;color:#111}
+.pagebar span{flex:1;text-align:center;font-size:13px}
+.qhead{display:flex;justify-content:space-between;gap:8px;align-items:center}.qnum{font-size:18px;font-weight:800}.score{font-size:13px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.choice{padding:14px;border:2px solid #cbd8d0;border-radius:12px;background:#fff;font-weight:800;font-size:18px}
+.choice.sel{border-color:var(--blue);background:#eef4ff}
+.choice.correct{border-color:#16803c;background:#eaf8ef}.choice.wrong{border-color:var(--red);background:#fff0ef}
+.actions{display:flex;gap:8px;margin-top:12px}.actions button{flex:1;padding:13px;border-radius:11px;border:0;font-weight:800}
+#check{background:var(--green);color:white}#next{background:#e8eee9}
+.result{display:none;margin-top:12px;padding:12px;border-radius:10px;font-weight:700}.result.ok{display:block;background:#eaf8ef;color:#126b31}.result.ng{display:block;background:#fff0ef;color:#9b1c1c}
+.small{font-size:12px;color:#5a685f;line-height:1.6}
+footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:8px 12px calc(8px + env(safe-area-inset-bottom));z-index:5}
+footer div{max-width:780px;margin:auto;display:flex;gap:8px}footer button{flex:1;border:0;border-radius:10px;padding:11px;background:#edf3ef}
+
+.dashboard{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{background:var(--pale);border-radius:12px;padding:12px;text-align:center}
+.metric b{display:block;font-size:22px;color:var(--green)}
+.metric span{font-size:12px;color:#526158}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.quick button{padding:13px;border:0;border-radius:11px;font-weight:800;background:#e8eee9}
+.quick button.primary{background:var(--green);color:white}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#eef4ff;color:#175cd3;font-size:12px;font-weight:700}
+@media(min-width:700px){.choices{grid-template-columns:repeat(4,1fr)}}
+
+</style>
+</head>
+<body>
+<header><h1>地域限定旅行業務取扱管理者 過去問クイズ</h1><div class="sub">2026年9月27日合格専用・今日から始める最小構成</div></header>
+<main>
+
+<section class="card">
+<div class="dashboard">
+  <div class="metric"><b id="daysLeft">--</b><span>試験までの日数</span></div>
+  <div class="metric"><b id="todayCount">0</b><span>今日の解答数</span></div>
+  <div class="metric"><b id="accuracy">0%</b><span>通算正答率</span></div>
+  <div class="metric"><b id="wrongCount">0</b><span>復習が必要な問題</span></div>
+</div>
+<div class="quick">
+  <button id="daily10" class="primary">今日の10問を始める</button>
+  <button id="reviewWrong">間違いだけ復習</button>
+  <button id="mockExam">模擬試験を始める</button>
+  <button id="resume">前回の続き</button>
+</div>
+<p class="small" style="margin-bottom:0">まず毎日10問。間違えた問題はその日のうちに再挑戦。週1回だけ模擬試験を行います。</p>
+</section>
+
+<section class="card">
+<div class="grid">
+<div><label>年度</label><select id="year"></select></div>
+<div><label>科目</label><select id="subject"></select></div>
+</div>
+<div class="grid" style="margin-top:10px">
+<div><label>問題</label><select id="question"></select></div>
+<div><label>出題順</label><select id="mode"><option value="order">順番</option><option value="random">ランダム</option><option value="wrong">間違いだけ</option></select></div>
+</div>
+<div class="progress"><div id="bar"></div></div>
+</section>
+
+<section class="card">
+<div class="qhead"><div class="qnum" id="qtitle"></div><div class="score" id="score"></div></div>
+<p class="small">問題文は下の原本画像で確認してください。画像はピンチ操作で拡大できます。表示ページがずれた場合は「前頁／次頁」で調整してください。</p>
+<div class="viewer"><div class="pagebar"><button id="prevPage">前頁</button><span id="pageLabel"></span><button id="nextPage">次頁</button></div><img id="pageImg" alt="試験問題"></div>
+<div class="choices" id="choices"></div>
+<div class="actions"><button id="check">答え合わせ</button><button id="next">次の問題</button></div>
+<div id="result" class="result"></div>
+</section>
+
+<section class="card">
+<strong>使い方</strong>
+<p class="small">①年度・科目・問題を選ぶ → ②原本を読む → ③ア〜エを選択 → ④答え合わせ。複数正解の問題は複数選択してください。学習履歴と間違いは端末内に保存されます。</p>
+</section>
+</main>
+<footer><div><button id="reset">履歴をリセット</button><button id="installHelp">iPhoneで使う方法</button></div></footer>
+<script src="data.js"></script>
+<script>
+const D=window.APP_DATA, $=id=>document.getElementById(id);
+let state={year:"7",subject:"law",q:0,page:3,selected:new Set(),checked:false};
+let hist=JSON.parse(localStorage.getItem("rrq_hist")||"{}");
+const choices=["ア","イ","ウ","エ","正解なし"];
+function key(){return `${state.year}-${state.subject}-${state.q}`}
+function save(){localStorage.setItem("rrq_hist",JSON.stringify(hist))}
+function fill(){
+ $("year").innerHTML=Object.keys(D.keys).reverse().map(y=>`<option value="${y}">令和${y=="1"?"元":y}年度</option>`).join("");
+ $("subject").innerHTML=Object.entries(D.labels).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+ $("year").value=state.year;$("subject").value=state.subject; fillQuestions(); loadQ();
+}
+function fillQuestions(){
+ const n=D.keys[state.year][state.subject].length;
+ $("question").innerHTML=Array.from({length:n},(_,i)=>`<option value="${i}">第${i+1}問</option>`).join("");
+ if(state.q>=n)state.q=0;$("question").value=state.q;
+}
+function approximatePage(){
+ const [a,b]=D.ranges[state.year][state.subject], n=D.keys[state.year][state.subject].length;
+ return Math.min(b, a+Math.floor(state.q*Math.max(1,b-a+1)/n));
+}
+function loadQ(){
+ state.selected=new Set();state.checked=false;state.page=approximatePage();
+ $("qtitle").textContent=`第${state.q+1}問`;
+ $("question").value=state.q;
+ renderPage();renderChoices();renderScore();
+ $("result").className="result";$("result").textContent="";
+ const n=D.keys[state.year][state.subject].length;
+ $("bar").style.width=((state.q+1)/n*100)+"%";
+}
+function renderPage(){
+ const max=D.pageCounts[state.year];
+ state.page=Math.max(1,Math.min(max,state.page));
+ $("pageImg").src=`assets/pages/R${state.year}/p${String(state.page).padStart(2,"0")}.webp`;
+ $("pageLabel").textContent=`原本 ${state.page} / ${max}ページ`;
+}
+function renderChoices(){
+ const correct=D.keys[state.year][state.subject][state.q].split(",");
+ const shown=correct.includes("正解なし")?choices:choices.slice(0,4);
+ $("choices").innerHTML=shown.map(c=>`<button class="choice" data-c="${c}">${c}</button>`).join("");
+ document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{
+   if(state.checked)return;
+   const c=b.dataset.c; state.selected.has(c)?state.selected.delete(c):state.selected.add(c);
+   b.classList.toggle("sel");
+ });
+}
+function renderScore(){
+ const vals=Object.values(hist).filter(x=>x.year==state.year&&x.subject==state.subject);
+ const ok=vals.filter(x=>x.ok).length;
+ $("score").textContent=`正解 ${ok} / 解答 ${vals.length}`;
+}
+function check(){
+ if(!state.selected.size){alert("答えを選んでください。");return}
+ state.checked=true;
+ const ans=D.keys[state.year][state.subject][state.q].split(",").sort();
+ const got=[...state.selected].sort();
+ const ok=JSON.stringify(ans)==JSON.stringify(got);
+ hist[key()]={ok,year:state.year,subject:state.subject,q:state.q,at:Date.now(),day:new Date().toISOString().slice(0,10)};save();localStorage.setItem("rrq_last",JSON.stringify({year:state.year,subject:state.subject,q:state.q,page:state.page}));updateDashboard();
+ document.querySelectorAll(".choice").forEach(b=>{
+   const c=b.dataset.c;
+   if(ans.includes(c))b.classList.add("correct");
+   else if(state.selected.has(c))b.classList.add("wrong");
+ });
+ $("result").className="result "+(ok?"ok":"ng");
+ $("result").textContent=ok?`正解です。答え：${ans.join("・")}`:`不正解です。正解：${ans.join("・")}`;
+ renderScore();
+}
+function next(){
+ const n=D.keys[state.year][state.subject].length;
+ const mode=$("mode").value;
+ if(mode==="random") state.q=Math.floor(Math.random()*n);
+ else if(mode==="wrong"){
+   const bad=Array.from({length:n},(_,i)=>i).filter(i=>hist[`${state.year}-${state.subject}-${i}`]&&!hist[`${state.year}-${state.subject}-${i}`].ok);
+   state.q=bad.length?bad[Math.floor(Math.random()*bad.length)]:(state.q+1)%n;
+ } else state.q=(state.q+1)%n;
+ loadQ();
+}
+$("year").onchange=e=>{state.year=e.target.value;state.q=0;fillQuestions();loadQ()}
+$("subject").onchange=e=>{state.subject=e.target.value;state.q=0;fillQuestions();loadQ()}
+$("question").onchange=e=>{state.q=+e.target.value;loadQ()}
+$("prevPage").onclick=()=>{state.page--;renderPage()}
+$("nextPage").onclick=()=>{state.page++;renderPage()}
+$("check").onclick=check;$("next").onclick=next;
+$("reset").onclick=()=>{if(confirm("学習履歴をすべて消しますか？")){hist={};save();renderScore();updateDashboard()}}
+$("installHelp").onclick=()=>alert("このアプリはWebアプリです。Web上に置いたURLをSafariで開き、画面下の共有ボタン →「ホーム画面に追加」を選んでください。ZIPを直接タップするだけでは本物のiPhoneアプリとしては入りません。");
+
+function updateDashboard(){
+ const all=Object.values(hist);
+ const today=new Date(); const ymd=today.toISOString().slice(0,10);
+ const todayN=all.filter(x=>x.day===ymd).length;
+ const ok=all.filter(x=>x.ok).length;
+ const wrong=all.filter(x=>!x.ok).length;
+ const exam=new Date("2026-09-27T00:00:00+09:00");
+ const now=new Date();
+ const days=Math.max(0,Math.ceil((exam-now)/(1000*60*60*24)));
+ $("daysLeft").textContent=days;
+ $("todayCount").textContent=todayN;
+ $("accuracy").textContent=all.length?Math.round(ok/all.length*100)+"%":"0%";
+ $("wrongCount").textContent=wrong;
+}
+function jumpRandom(){
+ const years=Object.keys(D.keys);
+ state.year=years[Math.floor(Math.random()*years.length)];
+ const subs=Object.keys(D.labels);
+ state.subject=subs[Math.floor(Math.random()*subs.length)];
+ state.q=Math.floor(Math.random()*D.keys[state.year][state.subject].length);
+ $("year").value=state.year;$("subject").value=state.subject;fillQuestions();loadQ();
+}
+function daily10(){
+ localStorage.setItem("rrq_daily_target","10");
+ $("mode").value="random";
+ jumpRandom();
+ alert("今日の10問を開始します。1問ごとに答え合わせをして、10問解いたら終了です。");
+}
+function reviewWrongNow(){
+ const bad=Object.values(hist).filter(x=>!x.ok);
+ if(!bad.length){alert("復習対象はありません。まず通常問題を解いてください。");return}
+ const x=bad[Math.floor(Math.random()*bad.length)];
+ state.year=x.year;state.subject=x.subject;state.q=x.q;
+ $("year").value=state.year;$("subject").value=state.subject;fillQuestions();loadQ();$("mode").value="wrong";
+}
+function mockExamNow(){
+ $("mode").value="random";
+ localStorage.setItem("rrq_mock","1");
+ jumpRandom();
+ alert("模擬試験モードです。時間を計り、途中で答えを調べずに進めてください。");
+}
+$("daily10").onclick=daily10;
+$("reviewWrong").onclick=reviewWrongNow;
+$("mockExam").onclick=mockExamNow;
+$("resume").onclick=()=>{
+ const last=JSON.parse(localStorage.getItem("rrq_last")||"null");
+ if(last){state=Object.assign(state,last);$("year").value=state.year;$("subject").value=state.subject;fillQuestions();loadQ()}
+ else alert("前回の記録はまだありません。");
+};
+
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+fill();updateDashboard();
+</script>
+</body></html>

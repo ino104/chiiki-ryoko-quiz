@@ -1,0 +1,9 @@
+{
+  "name": "地域限定旅行業務取扱管理者 過去問クイズ",
+  "short_name": "地域旅行クイズ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7f8f8",
+  "theme_color": "#0f5132",
+  "lang": "ja"
+}
