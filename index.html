@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="地域旅行Ver4">
+<meta name="apple-mobile-web-app-title" content="地域旅行Ver4.2">
 <meta name="theme-color" content="#0f5132">
 <link rel="manifest" href="manifest.webmanifest">
-<title>地域限定旅行業務取扱管理者 Ver4</title>
+<title>地域限定旅行業務取扱管理者 Ver4.2 Sprint1</title>
 <style>
 :root{--g:#0f5132;--bg:#f4f7f5;--line:#dbe5de;--ok:#147a3d;--ng:#b42318;--blue:#175cd3;--gold:#9a6700}
 *{box-sizing:border-box}
@@ -67,16 +67,31 @@ main{padding:10px 10px calc(125px + env(safe-area-inset-bottom))}
 .explanation{font-size:17px;line-height:1.85}.answer-line{font-size:19px}.judgement{font-size:23px}
 .nav button{padding:13px 10px;font-size:14px}
 }
+
+.continue-panel{display:grid;grid-template-columns:1.4fr .8fr;gap:10px;margin-bottom:12px}
+.continue-btn{border:0;border-radius:14px;padding:17px 14px;font-weight:900;cursor:pointer;min-height:78px;text-align:left}
+.continue-btn strong{display:block;font-size:18px;margin-bottom:4px}
+.continue-btn span{font-size:13px;font-weight:600}
+.continue-btn.go{background:#e9f7ef;color:#0f5132}
+.continue-btn.reset{background:#fff2f0;color:#9b1c13}
+.quiz-tools{display:flex;gap:8px;flex-wrap:wrap}
+.reset-small{border:0;background:#fff0ee;color:#9b1c13;border-radius:10px;padding:10px 12px;font-weight:900}
+@media(max-width:700px){.continue-panel{grid-template-columns:1fr}.continue-btn{min-height:68px}}
+
 </style>
 </head>
 <body>
-<header><h1>地域限定旅行業務取扱管理者 合格専用 Ver4</h1><small>令和7年度・旅行業法25問・iPhone対応</small></header>
+<header><h1>地域限定旅行業務取扱管理者 合格専用 Ver4.2</h1><small>令和7年度・旅行業法25問・続きから／リセット対応</small></header>
 <main>
 <section id="home">
   <section class="card">
     <h2 style="margin-top:0">学習メニュー</h2>
+    <div id="continuePanel" class="continue-panel hidden">
+      <button class="continue-btn go" id="continue25"><strong>▶ 続きから</strong><span id="continueText">前回の続きから再開</span></button>
+      <button class="continue-btn reset" id="reset25Home"><strong>↻ リセット</strong><span>全25問を第1問からやり直す</span></button>
+    </div>
     <div class="menu-grid">
-      <button class="menu-btn primary" id="all25"><strong>全25問に挑戦</strong><span>令和7年度・旅行業法を通して学習</span></button>
+      <button class="menu-btn primary" id="all25"><strong>全25問を最初から</strong><span>進行中の場合は確認後、第1問から開始</span></button>
       <button class="menu-btn" id="random5"><strong>ランダム5問</strong><span>短時間で毎回違う5問に挑戦</span></button>
       <button class="menu-btn" id="categoryMenu"><strong>分野別に学習</strong><span>苦手分野を選んで集中学習</span></button>
       <button class="menu-btn" id="wrongOnly"><strong>間違えた問題</strong><span>これまで間違えた問題だけ復習</span></button>
@@ -88,13 +103,13 @@ main{padding:10px 10px calc(125px + env(safe-area-inset-bottom))}
   </section>
   <section class="card">
     <h3 style="margin-top:0">今回の改善</h3>
-    <p>問題文・選択肢の読み上げ、分野別学習、ランダム5問、答え合わせ後に解答を先に表示する機能を追加しました。</p>
+    <p>全25問の「続きから」と「リセット」を追加しました。途中で終了しても、次回は前回の次の問題から再開できます。</p>
   </section>
 </section>
 
 <section id="quiz" class="hidden">
   <section class="card">
-    <div class="topline"><button id="backHome" class="back">← メニュー</button><strong id="modeTitle"></strong></div>
+    <div class="topline"><div class="quiz-tools"><button id="backHome" class="back">← メニュー</button><button id="reset25Quiz" class="reset-small hidden">↻ リセット</button></div><strong id="modeTitle"></strong></div>
   </section>
 
   <section class="card stats">
@@ -159,6 +174,7 @@ let session=[], pos=0, selected=new Set(), checked=false, mode="all", sessionRes
 let hist=JSON.parse(localStorage.getItem("v4_hist")||"{}");
 let notes=JSON.parse(localStorage.getItem("v4_notes")||"{}");
 let understanding=JSON.parse(localStorage.getItem("v4_understanding")||"{}");
+let all25Progress=JSON.parse(localStorage.getItem("v42_all25_progress")||"null");
 
 function categoryOf(id){
   for(const [name,ids] of Object.entries(C)) if(ids.includes(id)) return name;
@@ -168,16 +184,36 @@ function save(){
   localStorage.setItem("v4_hist",JSON.stringify(hist));
   localStorage.setItem("v4_notes",JSON.stringify(notes));
   localStorage.setItem("v4_understanding",JSON.stringify(understanding));
+  if(all25Progress) localStorage.setItem("v42_all25_progress",JSON.stringify(all25Progress));
+  else localStorage.removeItem("v42_all25_progress");
 }
+
+function refreshContinuePanel(){
+  const valid=all25Progress && Number.isInteger(all25Progress.nextPos) &&
+    all25Progress.nextPos>0 && all25Progress.nextPos<Q.length;
+  $("continuePanel").classList.toggle("hidden",!valid);
+  if(valid){
+    $("continueText").textContent=`第${all25Progress.nextPos+1}問から再開（${all25Progress.nextPos}/${Q.length}問まで終了）`;
+  }
+}
+function resetAll25Progress(startNow=false){
+  const hasProgress=all25Progress && all25Progress.nextPos>0;
+  if(hasProgress && !confirm("全25問の途中経過を消して、第1問からやり直しますか？")) return;
+  all25Progress=null; save(); refreshContinuePanel();
+  if(startNow) startSession(Q.map(q=>q.id),"全25問","all",0);
+}
+
 function show(id){
+  if(id==="home") refreshContinuePanel();
   ["home","quiz","summary"].forEach(x=>$(x).classList.add("hidden"));
   $(id).classList.remove("hidden");
   window.scrollTo({top:0,behavior:"smooth"});
 }
-function startSession(ids,title,sessionMode){
+function startSession(ids,title,sessionMode,initialPos=0){
   session=ids.map(id=>Q.find(q=>q.id===id)).filter(Boolean);
   if(!session.length){alert("対象となる問題がまだありません。");return}
-  pos=0; mode=sessionMode; sessionResults={};
+  pos=Math.max(0,Math.min(initialPos,session.length-1)); mode=sessionMode; sessionResults={};
+  $("reset25Quiz").classList.toggle("hidden",sessionMode!=="all");
   $("modeTitle").textContent=title;
   show("quiz"); render();
 }
@@ -205,7 +241,10 @@ function render(){
   document.querySelectorAll(".understanding button").forEach(b=>b.classList.toggle("active",understanding[q.id]==b.dataset.u));
   $("bar").style.width=((pos+1)/session.length*100)+"%";
   $("next").textContent=pos===session.length-1?(mode==="random5"?"結果を見る":"終了"):"次の問題 →";
-  updateStats(); save();
+  if(mode==="all"){
+    all25Progress={nextPos:pos,updatedAt:new Date().toISOString()};
+  }
+  updateStats(); save(); refreshContinuePanel();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function updateStats(){
@@ -246,13 +285,22 @@ $("clear").onclick=()=>{
 $("next").onclick=()=>{
   if(pos===session.length-1){
     if(mode==="random5"){showSummary();}
-    else{show("home");}
+    else{
+      if(mode==="all"){all25Progress=null;save();refreshContinuePanel();alert("全25問を終了しました。おつかれさまでした！");}
+      show("home");
+    }
     return;
   }
-  pos++;render();
+  pos++;
+  if(mode==="all") all25Progress={nextPos:pos,updatedAt:new Date().toISOString()};
+  render();
 };
 $("prev").onclick=()=>{if(pos>0){pos--;render()}};
-$("backHome").onclick=()=>{speechSynthesis.cancel();show("home")};
+$("backHome").onclick=()=>{
+  speechSynthesis.cancel();
+  if(mode==="all"){all25Progress={nextPos:pos,updatedAt:new Date().toISOString()};save();}
+  show("home");
+};
 document.querySelectorAll(".understanding button").forEach(b=>b.onclick=()=>{
   understanding[session[pos].id]=b.dataset.u;save();
   document.querySelectorAll(".understanding button").forEach(x=>x.classList.toggle("active",x===b));
@@ -286,7 +334,19 @@ function showSummary(){
 $("retryRandom").onclick=()=>startSession(shuffle(Q.map(q=>q.id)).slice(0,5),"ランダム5問","random5");
 $("summaryHome").onclick=()=>show("home");
 
-$("all25").onclick=()=>startSession(Q.map(q=>q.id),"全25問","all");
+$("all25").onclick=()=>{
+  if(all25Progress && all25Progress.nextPos>0){
+    if(!confirm("途中経過があります。消して第1問から始めますか？")) return;
+  }
+  all25Progress=null;save();
+  startSession(Q.map(q=>q.id),"全25問","all",0);
+};
+$("continue25").onclick=()=>{
+  const p=all25Progress?.nextPos||0;
+  startSession(Q.map(q=>q.id),"全25問・続きから","all",p);
+};
+$("reset25Home").onclick=()=>resetAll25Progress(true);
+$("reset25Quiz").onclick=()=>resetAll25Progress(true);
 $("random5").onclick=()=>startSession(shuffle(Q.map(q=>q.id)).slice(0,5),"ランダム5問","random5");
 $("wrongOnly").onclick=()=>{
   const ids=Q.filter(q=>hist[q.id]===false).map(q=>q.id);
@@ -309,7 +369,10 @@ document.addEventListener("keydown",e=>{
     else if(e.key==="Enter"){checked?$("next").click():$("check").click()}
   }
 });
-if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+refreshContinuePanel();
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").then(reg=>reg.update()).catch(()=>{});
+}
 </script>
 </body>
 </html>
