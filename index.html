@@ -1,378 +1,56 @@
 <!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="地域旅行Ver4.2">
-<meta name="theme-color" content="#0f5132">
-<link rel="manifest" href="manifest.webmanifest">
-<title>地域限定旅行業務取扱管理者 Ver4.2 Sprint1</title>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#174f3a"><link rel="manifest" href="manifest.webmanifest">
+<title>地域限定旅行業務取扱管理者 Ver5.0</title>
 <style>
-:root{--g:#0f5132;--bg:#f4f7f5;--line:#dbe5de;--ok:#147a3d;--ng:#b42318;--blue:#175cd3;--gold:#9a6700}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:"Yu Gothic UI","Meiryo",sans-serif;background:var(--bg);color:#17201b}
-button{font:inherit}
-header{position:sticky;top:0;background:var(--g);color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;z-index:20}
-header h1{font-size:19px;margin:0}header small{opacity:.9}
-main{max-width:780px;margin:auto;padding:12px 12px calc(120px + env(safe-area-inset-bottom))}
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px #0000000b}
-.hidden{display:none!important}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.menu-btn{border:0;border-radius:14px;padding:18px 14px;background:#eef8f2;color:#123d2a;font-weight:900;min-height:92px;text-align:left;cursor:pointer}
-.menu-btn strong{display:block;font-size:19px;margin-bottom:5px}
-.menu-btn span{font-size:13px;font-weight:600;color:#52645a}
-.menu-btn.primary{background:var(--g);color:#fff}.menu-btn.primary span{color:#dcefe5}
-.category-list{display:grid;gap:10px}
-.category-btn{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:15px;text-align:left;font-weight:900;cursor:pointer}
-.category-btn span{display:block;font-size:13px;font-weight:600;color:#607067;margin-top:3px}
-.topline{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.back{border:0;background:#e8eee9;border-radius:10px;padding:10px 12px;font-weight:800}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.stat{background:#eef8f2;border-radius:12px;padding:11px;text-align:center}
-.stat b{display:block;font-size:22px;color:var(--g)}.stat span{font-size:11px}
-.qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.qhead h2{margin:0;font-size:24px}.tag{font-size:12px;background:#eaf1ff;color:var(--blue);padding:6px 10px;border-radius:999px}
-.speech{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.speech button{border:0;border-radius:10px;padding:11px 13px;font-weight:800;background:#edf2ef}
-.question{font-size:23px;line-height:1.75;font-weight:800;margin:22px 0}
-.choices{display:grid;gap:12px}
-.choice{display:flex;gap:14px;text-align:left;padding:17px;border:2px solid #cfdad3;background:#fff;border-radius:13px;cursor:pointer;font-size:18px;line-height:1.55;min-height:64px;-webkit-tap-highlight-color:transparent}
-.choice strong{font-size:20px}.choice.sel{border-color:var(--blue);background:#eef4ff}.choice.correct{border-color:var(--ok);background:#eaf8ef}.choice.wrong{border-color:var(--ng);background:#fff0ef}
-.actions{display:grid;grid-template-columns:1.4fr .8fr;gap:10px;margin-top:22px;position:sticky;bottom:calc(8px + env(safe-area-inset-bottom));z-index:8;background:#fff;padding:8px 0}
-.actions button,.nav button,.understanding button{border:0;border-radius:12px;padding:15px 14px;font-weight:800;cursor:pointer;min-height:52px}
-.primaryBtn{background:var(--g);color:#fff}.secondary{background:#e8eee9}
-.result{display:none}.result.show{display:block}
-.answer-panel{border:3px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;background:#fbfdfc}
-.answer-panel.ok{border-color:var(--ok);background:#edf9f1}.answer-panel.ng{border-color:var(--ng);background:#fff3f2}
-.judgement{font-size:25px;font-weight:1000;margin-bottom:10px}
-.answer-line{font-size:21px;font-weight:900;line-height:1.6}
-.explanation{font-size:18px;line-height:1.9}
-.memory{background:#fff8db;border-left:5px solid #d8a400;padding:14px 16px;border-radius:8px;margin-top:18px}
-.understanding{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.understanding button{background:#edf2ef}.understanding button.active{background:var(--g);color:#fff}
-.nav{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.progress{height:10px;background:#e4eae6;border-radius:99px;overflow:hidden;flex:1}.progress div{height:100%;background:var(--g)}
-.note{width:100%;min-height:100px;border:1px solid #bccac1;border-radius:10px;padding:12px;font:inherit}
-.summary-score{text-align:center;font-size:30px;font-weight:1000;color:var(--g);margin:10px 0 20px}
-.summary-list{display:grid;gap:9px}.summary-item{padding:12px;border-radius:10px;background:#f2f5f3}.summary-item.ng{background:#fff0ef}
-@media(max-width:700px){
-header h1{font-size:17px;line-height:1.35}header small{font-size:11px}
-main{padding:10px 10px calc(125px + env(safe-area-inset-bottom))}
-.menu-grid{grid-template-columns:1fr}
-.stats{grid-template-columns:1fr 1fr}.stat b{font-size:22px}
-.qhead{flex-direction:column}.qhead h2{font-size:22px}
-.question{font-size:21px;line-height:1.7}.choice{font-size:17px;padding:16px}
-.explanation{font-size:17px;line-height:1.85}.answer-line{font-size:19px}.judgement{font-size:23px}
-.nav button{padding:13px 10px;font-size:14px}
-}
-
-.continue-panel{display:grid;grid-template-columns:1.4fr .8fr;gap:10px;margin-bottom:12px}
-.continue-btn{border:0;border-radius:14px;padding:17px 14px;font-weight:900;cursor:pointer;min-height:78px;text-align:left}
-.continue-btn strong{display:block;font-size:18px;margin-bottom:4px}
-.continue-btn span{font-size:13px;font-weight:600}
-.continue-btn.go{background:#e9f7ef;color:#0f5132}
-.continue-btn.reset{background:#fff2f0;color:#9b1c13}
-.quiz-tools{display:flex;gap:8px;flex-wrap:wrap}
-.reset-small{border:0;background:#fff0ee;color:#9b1c13;border-radius:10px;padding:10px 12px;font-weight:900}
-@media(max-width:700px){.continue-panel{grid-template-columns:1fr}.continue-btn{min-height:68px}}
-
-</style>
-</head>
-<body>
-<header><h1>地域限定旅行業務取扱管理者 合格専用 Ver4.2</h1><small>令和7年度・旅行業法25問・続きから／リセット対応</small></header>
+:root{--g:#174f3a;--p:#eaf4ef;--l:#d8e1dc;--r:#b42318;--b:#175cd3}
+*{box-sizing:border-box}body{margin:0;background:#f4f6f5;color:#17201b;font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic","Hiragino Sans",sans-serif}
+header{position:sticky;top:0;z-index:9;background:var(--g);color:#fff;padding:14px 20px}header h1{font-size:20px;margin:0}.sub{font-size:12px;opacity:.9}
+main{max-width:1100px;margin:auto;padding:18px 18px 100px}.card{background:#fff;border:1px solid var(--l);border-radius:16px;padding:18px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}label{display:block;font-size:12px;font-weight:800;margin-bottom:5px}
+select,button,textarea{font:inherit}select,textarea{width:100%;border:1px solid #b8c6be;border-radius:10px;padding:11px;background:#fff}
+button{border:0;border-radius:11px;padding:12px 14px;font-weight:800;cursor:pointer}.primary{background:var(--g);color:#fff}.soft{background:var(--p);color:var(--g)}.danger{background:#fff0ef;color:var(--r)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.stat{background:#f7faf8;border:1px solid var(--l);border-radius:12px;padding:12px}.stat b{font-size:22px;display:block}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}.hidden{display:none!important}.qmeta{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.qtitle{font-size:18px;font-weight:900}
+.question{white-space:pre-wrap;font-size:22px;line-height:1.85;margin-top:18px;padding:20px;border-radius:14px;background:#fcfdfc;border:1px solid var(--l)}
+.answer-area{margin-top:32px;padding-top:24px;border-top:4px solid var(--p)}.choices{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.choice{font-size:22px;background:#fff;border:2px solid #bccbc2}.choice.sel{border-color:var(--b);background:#eef4ff}.choice.correct{border-color:#16803c;background:#eaf8ef}.choice.wrong{border-color:var(--r);background:#fff0ef}
+.result{margin-top:14px;padding:15px;border-radius:12px;line-height:1.7}.ok{background:#eaf8ef;color:#126b31}.ng{background:#fff0ef;color:#9b1c1c}.detail{margin-top:10px;border:1px solid var(--l);border-radius:12px;padding:14px}.detail h3{margin:0 0 8px;font-size:15px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--l);padding:10px;z-index:8}footer .inner{max-width:1100px;margin:auto;display:flex;gap:8px}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.question{font-size:19px}.choices{grid-template-columns:1fr 1fr}}
+@media print{header,.setup,.toolbar,footer,.answer-area .actions{display:none!important}main{max-width:none;padding:0}.card{border:0}.question{font-size:16px}}
+</style></head>
+<body><header><h1>地域限定旅行業務取扱管理者 試験対策アプリ Ver5.0</h1><div class="sub">令和6・7年度／全科目118問／統合PC版</div></header>
 <main>
-<section id="home">
-  <section class="card">
-    <h2 style="margin-top:0">学習メニュー</h2>
-    <div id="continuePanel" class="continue-panel hidden">
-      <button class="continue-btn go" id="continue25"><strong>▶ 続きから</strong><span id="continueText">前回の続きから再開</span></button>
-      <button class="continue-btn reset" id="reset25Home"><strong>↻ リセット</strong><span>全25問を第1問からやり直す</span></button>
-    </div>
-    <div class="menu-grid">
-      <button class="menu-btn primary" id="all25"><strong>全25問を最初から</strong><span>進行中の場合は確認後、第1問から開始</span></button>
-      <button class="menu-btn" id="random5"><strong>ランダム5問</strong><span>短時間で毎回違う5問に挑戦</span></button>
-      <button class="menu-btn" id="categoryMenu"><strong>分野別に学習</strong><span>苦手分野を選んで集中学習</span></button>
-      <button class="menu-btn" id="wrongOnly"><strong>間違えた問題</strong><span>これまで間違えた問題だけ復習</span></button>
-    </div>
-  </section>
-  <section id="categoryCard" class="card hidden">
-    <div class="topline"><h2 style="margin:0">分野を選ぶ</h2><button class="back" id="closeCategories">閉じる</button></div>
-    <div id="categoryList" class="category-list" style="margin-top:14px"></div>
-  </section>
-  <section class="card">
-    <h3 style="margin-top:0">今回の改善</h3>
-    <p>全25問の「続きから」と「リセット」を追加しました。途中で終了しても、次回は前回の次の問題から再開できます。</p>
-  </section>
-</section>
-
-<section id="quiz" class="hidden">
-  <section class="card">
-    <div class="topline"><div class="quiz-tools"><button id="backHome" class="back">← メニュー</button><button id="reset25Quiz" class="reset-small hidden">↻ リセット</button></div><strong id="modeTitle"></strong></div>
-  </section>
-
-  <section class="card stats">
-    <div class="stat"><b id="num">1/5</b><span>現在の問題</span></div>
-    <div class="stat"><b id="correct">0</b><span>正解数</span></div>
-    <div class="stat"><b id="accuracy">0%</b><span>正答率</span></div>
-    <div class="stat"><b id="review">0</b><span>要復習</span></div>
-  </section>
-
-  <section class="card">
-    <div class="qhead"><h2 id="title">第1問</h2><span id="categoryTag" class="tag"></span></div>
-    <div class="speech"><button id="speak">🔊 問題と選択肢を読み上げ</button><button id="stopSpeak">■ 読み上げ停止</button></div>
-    <div id="question" class="question"></div>
-    <div id="choices" class="choices"></div>
-    <div class="actions"><button id="check" class="primaryBtn">答え合わせ</button><button id="clear" class="secondary">選択を解除</button></div>
-  </section>
-
-  <section id="result" class="card result">
-    <div id="answerPanel" class="answer-panel">
-      <div id="judgement" class="judgement"></div>
-      <div id="yourAnswer" class="answer-line"></div>
-      <div id="correctAnswer" class="answer-line"></div>
-    </div>
-    <div class="explanation">
-      <h3>解説</h3><p id="explanation"></p>
-      <div class="memory"><strong>覚え方</strong><br><span id="memory"></span></div>
-      <h3>理解度</h3>
-      <div class="understanding">
-        <button data-u="3">理解した</button><button data-u="2">少し不安</button><button data-u="1">分からない</button>
-      </div>
-      <h3>自分用メモ</h3>
-      <textarea id="note" class="note" placeholder="覚え方、間違えた理由、条文番号など"></textarea>
-      <button id="saveNote" class="secondary" style="margin-top:8px">メモを保存</button>
-    </div>
-  </section>
-
-  <section class="card nav">
-    <button id="prev" class="secondary">← 前の問題</button>
-    <div class="progress"><div id="bar"></div></div>
-    <button id="next" class="primaryBtn">次の問題 →</button>
-  </section>
-</section>
-
-<section id="summary" class="hidden">
-  <section class="card">
-    <h2 style="margin-top:0">5問セット結果</h2>
-    <div id="summaryScore" class="summary-score"></div>
-    <div id="summaryList" class="summary-list"></div>
-    <div class="menu-grid" style="margin-top:18px">
-      <button id="retryRandom" class="menu-btn primary"><strong>別の5問に挑戦</strong><span>新しい組み合わせで再挑戦</span></button>
-      <button id="summaryHome" class="menu-btn"><strong>メニューへ戻る</strong><span>学習メニューを選び直す</span></button>
-    </div>
-  </section>
-</section>
-</main>
-
-<script src="questions.js"></script>
-<script src="categories.js"></script>
-<script>
-const Q=window.QUESTIONS, C=window.CATEGORIES, $=id=>document.getElementById(id);
-let session=[], pos=0, selected=new Set(), checked=false, mode="all", sessionResults={};
-let hist=JSON.parse(localStorage.getItem("v4_hist")||"{}");
-let notes=JSON.parse(localStorage.getItem("v4_notes")||"{}");
-let understanding=JSON.parse(localStorage.getItem("v4_understanding")||"{}");
-let all25Progress=JSON.parse(localStorage.getItem("v42_all25_progress")||"null");
-
-function categoryOf(id){
-  for(const [name,ids] of Object.entries(C)) if(ids.includes(id)) return name;
-  return "旅行業法";
-}
-function save(){
-  localStorage.setItem("v4_hist",JSON.stringify(hist));
-  localStorage.setItem("v4_notes",JSON.stringify(notes));
-  localStorage.setItem("v4_understanding",JSON.stringify(understanding));
-  if(all25Progress) localStorage.setItem("v42_all25_progress",JSON.stringify(all25Progress));
-  else localStorage.removeItem("v42_all25_progress");
-}
-
-function refreshContinuePanel(){
-  const valid=all25Progress && Number.isInteger(all25Progress.nextPos) &&
-    all25Progress.nextPos>0 && all25Progress.nextPos<Q.length;
-  $("continuePanel").classList.toggle("hidden",!valid);
-  if(valid){
-    $("continueText").textContent=`第${all25Progress.nextPos+1}問から再開（${all25Progress.nextPos}/${Q.length}問まで終了）`;
-  }
-}
-function resetAll25Progress(startNow=false){
-  const hasProgress=all25Progress && all25Progress.nextPos>0;
-  if(hasProgress && !confirm("全25問の途中経過を消して、第1問からやり直しますか？")) return;
-  all25Progress=null; save(); refreshContinuePanel();
-  if(startNow) startSession(Q.map(q=>q.id),"全25問","all",0);
-}
-
-function show(id){
-  if(id==="home") refreshContinuePanel();
-  ["home","quiz","summary"].forEach(x=>$(x).classList.add("hidden"));
-  $(id).classList.remove("hidden");
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function startSession(ids,title,sessionMode,initialPos=0){
-  session=ids.map(id=>Q.find(q=>q.id===id)).filter(Boolean);
-  if(!session.length){alert("対象となる問題がまだありません。");return}
-  pos=Math.max(0,Math.min(initialPos,session.length-1)); mode=sessionMode; sessionResults={};
-  $("reset25Quiz").classList.toggle("hidden",sessionMode!=="all");
-  $("modeTitle").textContent=title;
-  show("quiz"); render();
-}
-function shuffle(arr){
-  const a=[...arr];
-  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
-  return a;
-}
-function render(){
-  speechSynthesis.cancel();
-  const q=session[pos]; selected=new Set(); checked=false;
-  $("title").textContent=`第${q.id}問`;
-  $("num").textContent=`${pos+1}/${session.length}`;
-  $("question").textContent=q.q;
-  $("categoryTag").textContent=categoryOf(q.id);
-  $("choices").innerHTML=Object.entries(q.choices).map(([k,v])=>`<button class="choice" data-k="${k}"><strong>${k}</strong><span>${v}</span></button>`).join("");
-  document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{
-    if(checked)return;
-    const k=b.dataset.k;
-    selected.has(k)?selected.delete(k):selected.add(k);
-    b.classList.toggle("sel");
-  });
-  $("result").className="card result";
-  $("note").value=notes[q.id]||"";
-  document.querySelectorAll(".understanding button").forEach(b=>b.classList.toggle("active",understanding[q.id]==b.dataset.u));
-  $("bar").style.width=((pos+1)/session.length*100)+"%";
-  $("next").textContent=pos===session.length-1?(mode==="random5"?"結果を見る":"終了"):"次の問題 →";
-  if(mode==="all"){
-    all25Progress={nextPos:pos,updatedAt:new Date().toISOString()};
-  }
-  updateStats(); save(); refreshContinuePanel();
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function updateStats(){
-  const vals=Object.values(hist), ok=vals.filter(Boolean).length;
-  $("correct").textContent=Object.values(sessionResults).filter(Boolean).length;
-  $("accuracy").textContent=Object.keys(sessionResults).length?Math.round(Object.values(sessionResults).filter(Boolean).length/Object.keys(sessionResults).length*100)+"%":"0%";
-  $("review").textContent=Object.values(understanding).filter(x=>+x<3).length;
-}
-function selectedText(q){
-  return [...selected].sort().map(k=>`${k}（${q.choices[k]}）`).join("、");
-}
-$("check").onclick=()=>{
-  if(!selected.size){alert("答えを選んでください。");return}
-  checked=true;
-  const q=session[pos], ans=[...q.answer].sort(), got=[...selected].sort();
-  const ok=JSON.stringify(ans)===JSON.stringify(got);
-  hist[q.id]=ok; sessionResults[q.id]=ok;
-  document.querySelectorAll(".choice").forEach(b=>{
-    const k=b.dataset.k;
-    if(ans.includes(k))b.classList.add("correct");
-    else if(selected.has(k))b.classList.add("wrong");
-  });
-  $("answerPanel").className="answer-panel "+(ok?"ok":"ng");
-  $("judgement").textContent=ok?"正解です":"不正解です";
-  $("yourAnswer").textContent="あなたの回答："+selectedText(q);
-  $("correctAnswer").textContent="正しい解答："+ans.map(k=>`${k}（${q.choices[k]}）`).join("、");
-  $("explanation").textContent=q.explanation;
-  $("memory").textContent=q.memory;
-  $("result").className="card result show";
-  updateStats();save();
-  setTimeout(()=>$("answerPanel").scrollIntoView({behavior:"smooth",block:"center"}),80);
-};
-$("clear").onclick=()=>{
-  if(checked)return;
-  selected.clear();
-  document.querySelectorAll(".choice").forEach(b=>b.classList.remove("sel"));
-};
-$("next").onclick=()=>{
-  if(pos===session.length-1){
-    if(mode==="random5"){showSummary();}
-    else{
-      if(mode==="all"){all25Progress=null;save();refreshContinuePanel();alert("全25問を終了しました。おつかれさまでした！");}
-      show("home");
-    }
-    return;
-  }
-  pos++;
-  if(mode==="all") all25Progress={nextPos:pos,updatedAt:new Date().toISOString()};
-  render();
-};
-$("prev").onclick=()=>{if(pos>0){pos--;render()}};
-$("backHome").onclick=()=>{
-  speechSynthesis.cancel();
-  if(mode==="all"){all25Progress={nextPos:pos,updatedAt:new Date().toISOString()};save();}
-  show("home");
-};
-document.querySelectorAll(".understanding button").forEach(b=>b.onclick=()=>{
-  understanding[session[pos].id]=b.dataset.u;save();
-  document.querySelectorAll(".understanding button").forEach(x=>x.classList.toggle("active",x===b));
-});
-$("saveNote").onclick=()=>{notes[session[pos].id]=$("note").value;save();alert("メモを保存しました。")};
-
-function speakCurrent(){
-  if(!("speechSynthesis" in window)){alert("この端末では読み上げ機能を利用できません。");return}
-  speechSynthesis.cancel();
-  const q=session[pos];
-  const text=`第${q.id}問。${q.q}。`+Object.entries(q.choices).map(([k,v])=>`${k}。${v}。`).join("");
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang="ja-JP";u.rate=0.92;u.pitch=1;
-  const voices=speechSynthesis.getVoices();
-  const ja=voices.find(v=>v.lang&&v.lang.startsWith("ja"));
-  if(ja)u.voice=ja;
-  speechSynthesis.speak(u);
-}
-$("speak").onclick=speakCurrent;
-$("stopSpeak").onclick=()=>speechSynthesis.cancel();
-
-function showSummary(){
-  const correct=Object.values(sessionResults).filter(Boolean).length;
-  $("summaryScore").textContent=`${correct} / ${session.length} 問正解`;
-  $("summaryList").innerHTML=session.map(q=>{
-    const ok=!!sessionResults[q.id];
-    return `<div class="summary-item ${ok?"":"ng"}"><strong>第${q.id}問　${ok?"正解":"要復習"}</strong><br><span>${categoryOf(q.id)}</span></div>`;
-  }).join("");
-  show("summary");
-}
-$("retryRandom").onclick=()=>startSession(shuffle(Q.map(q=>q.id)).slice(0,5),"ランダム5問","random5");
-$("summaryHome").onclick=()=>show("home");
-
-$("all25").onclick=()=>{
-  if(all25Progress && all25Progress.nextPos>0){
-    if(!confirm("途中経過があります。消して第1問から始めますか？")) return;
-  }
-  all25Progress=null;save();
-  startSession(Q.map(q=>q.id),"全25問","all",0);
-};
-$("continue25").onclick=()=>{
-  const p=all25Progress?.nextPos||0;
-  startSession(Q.map(q=>q.id),"全25問・続きから","all",p);
-};
-$("reset25Home").onclick=()=>resetAll25Progress(true);
-$("reset25Quiz").onclick=()=>resetAll25Progress(true);
-$("random5").onclick=()=>startSession(shuffle(Q.map(q=>q.id)).slice(0,5),"ランダム5問","random5");
-$("wrongOnly").onclick=()=>{
-  const ids=Q.filter(q=>hist[q.id]===false).map(q=>q.id);
-  startSession(ids,"間違えた問題","wrong");
-};
-$("categoryMenu").onclick=()=>$("categoryCard").classList.remove("hidden");
-$("closeCategories").onclick=()=>$("categoryCard").classList.add("hidden");
-
-$("categoryList").innerHTML=Object.entries(C).map(([name,ids])=>
-  `<button class="category-btn" data-cat="${name}">${name}<span>${ids.length}問</span></button>`
-).join("");
-document.querySelectorAll(".category-btn").forEach(b=>b.onclick=()=>{
-  const name=b.dataset.cat;
-  startSession(C[name],name,"category");
-});
-
-document.addEventListener("keydown",e=>{
-  if(!$("quiz").classList.contains("hidden") && e.target.tagName!=="TEXTAREA"){
-    if(["1","2","3","4"].includes(e.key)){const b=document.querySelectorAll(".choice")[+e.key-1];if(b)b.click()}
-    else if(e.key==="Enter"){checked?$("next").click():$("check").click()}
-  }
-});
-refreshContinuePanel();
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js").then(reg=>reg.update()).catch(()=>{});
-}
-</script>
-</body>
-</html>
+<section class="card setup"><div class="grid">
+<div><label>年度</label><select id="year"><option value="all">令和6・7年度</option><option value="6">令和6年度</option><option value="7">令和7年度</option></select></div>
+<div><label>科目</label><select id="subject"><option value="all">全科目</option><option value="law">旅行業法</option><option value="terms">旅行業約款等</option><option value="practice">国内旅行実務</option></select></div>
+<div><label>出題方法</label><select id="mode"><option value="order">順番</option><option value="random5">ランダム5問</option><option value="random10">ランダム10問</option><option value="wrong">間違い復習</option><option value="favorite">お気に入り</option></select></div>
+<div><label>開始</label><button id="start" class="primary" style="width:100%">新しく始める</button></div></div>
+<div class="toolbar" style="margin-top:12px"><button id="continue" class="soft">▶ 続きから</button><button id="resetSession" class="danger">↻ 途中位置をリセット</button><button id="csv" class="soft">CSV出力</button><button id="print" class="soft">印刷</button></div></section>
+<section class="card stats"><div class="stat"><small>収録問題</small><b>118</b></div><div class="stat"><small>解答数</small><b id="answered">0</b></div><div class="stat"><small>正答率</small><b id="rate">0%</b></div><div class="stat"><small>学習時間</small><b id="time">0分</b></div><div class="stat"><small>お気に入り</small><b id="favCount">0</b></div></section>
+<section id="quiz" class="card hidden"><div class="qmeta"><div><div class="qtitle" id="qtitle"></div><div id="progress"></div></div><div class="toolbar"><button id="fav" class="soft">☆ お気に入り</button><select id="understanding" style="width:auto"><option value="">理解度</option><option>もう一度</option><option>少し不安</option><option>理解した</option></select></div></div>
+<div id="question" class="question"></div><div class="answer-area"><h2>回答欄</h2><p>複数選択問題は複数選べます。</p><div class="choices" id="choices"></div>
+<div class="actions"><button id="check" class="primary">答え合わせ</button><button id="next" class="soft">次の問題</button><button id="home" class="soft">学習条件へ戻る</button></div>
+<div id="result" class="hidden"></div><div id="details" class="hidden"><div class="detail"><h3>解説</h3><div id="explanation"></div></div><div class="detail"><h3>根拠条文・資料</h3><div id="basis"></div></div><div class="detail"><h3>覚え方</h3><div id="memory"></div></div><div class="detail"><h3>誤答理由</h3><div id="wrongReason"></div></div></div>
+<div class="detail"><h3>自分用メモ</h3><textarea id="memo" rows="4"></textarea></div></div></section></main>
+<footer><div class="inner"><button id="prev" class="soft">← 前の問題</button><button id="footerNext" class="primary">次の問題 →</button></div></footer>
+<script src="data.js"></script><script>
+const Q=window.QUESTIONS,$=id=>document.getElementById(id),CH=["ア","イ","ウ","エ"];
+let hist=JSON.parse(localStorage.getItem("v5_hist")||"{}"),favs=JSON.parse(localStorage.getItem("v5_favs")||"{}"),memos=JSON.parse(localStorage.getItem("v5_memos")||"{}"),understands=JSON.parse(localStorage.getItem("v5_understands")||"{}"),saved=JSON.parse(localStorage.getItem("v5_session")||"null"),elapsed=Number(localStorage.getItem("v5_time")||0),started=Date.now(),session=[],pos=0,selected=new Set(),checked=false;
+function save(){localStorage.setItem("v5_hist",JSON.stringify(hist));localStorage.setItem("v5_favs",JSON.stringify(favs));localStorage.setItem("v5_memos",JSON.stringify(memos));localStorage.setItem("v5_understands",JSON.stringify(understands));localStorage.setItem("v5_time",elapsed+Math.floor((Date.now()-started)/1000));localStorage.setItem("v5_session",JSON.stringify({ids:session.map(q=>q.id),pos,year:$("year").value,subject:$("subject").value,mode:$("mode").value}))}
+setInterval(()=>{save();updateStats()},10000);window.addEventListener("beforeunload",save);
+function updateStats(){let v=Object.values(hist),a=v.length,c=v.filter(x=>x.correct).length;$("answered").textContent=a;$("rate").textContent=a?Math.round(c/a*100)+"%":"0%";$("time").textContent=Math.floor((elapsed+Math.floor((Date.now()-started)/1000))/60)+"分";$("favCount").textContent=Object.keys(favs).length}
+function pool(){return Q.filter(q=>($("year").value==="all"||String(q.year)===$("year").value)&&($("subject").value==="all"||q.subject===$("subject").value))}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function startNew(){let p=pool(),m=$("mode").value;if(m==="random5")p=shuffle(p).slice(0,5);else if(m==="random10")p=shuffle(p).slice(0,10);else if(m==="wrong")p=p.filter(q=>hist[q.id]&&!hist[q.id].correct);else if(m==="favorite")p=p.filter(q=>favs[q.id]);if(!p.length){alert("条件に合う問題がありません。");return}session=p;pos=0;render()}
+function continueSession(){if(!saved||!saved.ids?.length){alert("保存された途中位置がありません。");return}$("year").value=saved.year||"all";$("subject").value=saved.subject||"all";$("mode").value=saved.mode||"order";session=saved.ids.map(id=>Q.find(q=>q.id===id)).filter(Boolean);pos=Math.min(saved.pos||0,session.length-1);render()}
+function render(){if(!session.length)return;let q=session[pos];selected=new Set();checked=false;$("quiz").classList.remove("hidden");$("qtitle").textContent=`令和${q.year}年度　${q.subjectName}　${q.label}`;$("progress").textContent=`${pos+1} / ${session.length}`;$("question").textContent=q.text;$("choices").innerHTML="";CH.forEach(c=>{let b=document.createElement("button");b.className="choice";b.textContent=c;b.onclick=()=>{if(checked)return;selected.has(c)?selected.delete(c):selected.add(c);b.classList.toggle("sel")};$("choices").appendChild(b)});$("result").className="hidden";$("details").className="hidden";$("memo").value=memos[q.id]||"";$("understanding").value=understands[q.id]||"";$("fav").textContent=favs[q.id]?"★ お気に入り":"☆ お気に入り";window.scrollTo({top:$("quiz").offsetTop-70,behavior:"smooth"});save()}
+function check(){if(!selected.size){alert("回答を選択してください。");return}let q=session[pos],a=[...selected].sort(),correct=[...q.answer].sort(),ok=JSON.stringify(a)===JSON.stringify(correct);checked=true;hist[q.id]={correct:ok,selected:a,answer:correct,at:new Date().toLocaleString()};[...$("choices").children].forEach(b=>{if(correct.includes(b.textContent))b.classList.add("correct");else if(selected.has(b.textContent))b.classList.add("wrong")});let r=$("result");r.className="result "+(ok?"ok":"ng");r.textContent=(ok?"正解です。":"不正解です。")+" 正解："+correct.join("・");$("details").className="";$("explanation").textContent=q.explanation;$("basis").textContent=q.basis;$("memory").textContent=q.memory;$("wrongReason").textContent=q.wrongReason;save();updateStats()}
+function move(d){if(!session.length)return;pos=Math.max(0,Math.min(session.length-1,pos+d));render()}
+$("start").onclick=startNew;$("continue").onclick=continueSession;$("check").onclick=check;$("next").onclick=()=>move(1);$("footerNext").onclick=()=>move(1);$("prev").onclick=()=>move(-1);$("home").onclick=()=>{$("quiz").classList.add("hidden");window.scrollTo({top:0,behavior:"smooth"})};
+$("fav").onclick=()=>{let id=session[pos].id;favs[id]?delete favs[id]:favs[id]=true;save();render()};$("memo").oninput=()=>{if(session.length){memos[session[pos].id]=$("memo").value;save()}};$("understanding").onchange=()=>{if(session.length){understands[session[pos].id]=$("understanding").value;save()}};
+$("resetSession").onclick=()=>{if(confirm("途中位置だけを消しますか？ 正誤履歴・メモ・お気に入りは残ります。")){saved=null;localStorage.removeItem("v5_session");alert("途中位置をリセットしました。")}};$("print").onclick=()=>window.print();
+$("csv").onclick=()=>{let rows=[["ID","年度","科目","問題","正誤","自分の回答","正解","理解度","メモ","日時"]];Q.forEach(q=>{let h=hist[q.id]||{};rows.push([q.id,q.year,q.subjectName,q.label,h.correct===true?"正解":h.correct===false?"不正解":"",h.selected?.join("・")||"",q.answer.join("・"),understands[q.id]||"",memos[q.id]||"",h.at||""])});let csv="\ufeff"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\r\n");let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="地域限定旅行業務取扱管理者_学習履歴.csv";a.click()};
+updateStats();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script></body></html>

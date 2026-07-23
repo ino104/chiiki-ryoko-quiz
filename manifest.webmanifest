@@ -1,12 +1,8 @@
 {
-  "name": "地域限定旅行業務取扱管理者 Ver4.2",
-  "short_name": "地域旅行4.2",
+  "name": "地域限定旅行業務取扱管理者 Ver5.0",
+  "short_name": "地域旅行Ver5",
   "start_url": "./index.html",
-  "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#f4f7f5",
-  "theme_color": "#0f5132",
-  "lang": "ja",
-  "description": "令和7年度旅行業法25問・続きから／リセット対応"
+  "background_color": "#f4f6f5",
+  "theme_color": "#174f3a"
 }
