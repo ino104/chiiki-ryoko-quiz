@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#174f3a"><link rel="manifest" href="manifest.webmanifest">
-<title>地域限定旅行業務取扱管理者 Ver5.0</title>
+<title>地域限定旅行業務取扱管理者 Ver5.2</title>
 <style>
 :root{--g:#174f3a;--p:#eaf4ef;--l:#d8e1dc;--r:#b42318;--b:#175cd3}
 *{box-sizing:border-box}body{margin:0;background:#f4f6f5;color:#17201b;font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic","Hiragino Sans",sans-serif}
@@ -20,10 +20,10 @@ button{border:0;border-radius:11px;padding:12px 14px;font-weight:800;cursor:poin
 @media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.question{font-size:19px}.choices{grid-template-columns:1fr 1fr}}
 @media print{header,.setup,.toolbar,footer,.answer-area .actions{display:none!important}main{max-width:none;padding:0}.card{border:0}.question{font-size:16px}}
 </style></head>
-<body><header><h1>地域限定旅行業務取扱管理者 試験対策アプリ Ver5.0</h1><div class="sub">令和6・7年度／全科目118問／統合PC版</div></header>
-<main>
+<body><header><h1>地域限定旅行業務取扱管理者 試験対策アプリ Ver5.2</h1><div class="sub">令和5・6・7年度／全科目118問／統合PC版</div></header>
+<div id="data-status-banner" style="max-width:900px;margin:12px auto 0;padding:12px 16px;background:#fff8e6;border:1px solid #e6c76a;border-radius:12px;font-size:14px;line-height:1.6"><b>3か年版更新中</b>：令和6・7年度の既存データを保持したまま、令和5年度の公式問題・公式正解を照合して追加しています。未確認データを推測で補うことはしません。</div><main>
 <section class="card setup"><div class="grid">
-<div><label>年度</label><select id="year"><option value="all">令和6・7年度</option><option value="6">令和6年度</option><option value="7">令和7年度</option></select></div>
+<div><label>年度</label><select id="year"><option value="all">令和5・6・7年度</option><option value="6">令和6年度</option><option value="7">令和7年度</option></select></div>
 <div><label>科目</label><select id="subject"><option value="all">全科目</option><option value="law">旅行業法</option><option value="terms">旅行業約款等</option><option value="practice">国内旅行実務</option></select></div>
 <div><label>出題方法</label><select id="mode"><option value="order">順番</option><option value="random5">ランダム5問</option><option value="random10">ランダム10問</option><option value="wrong">間違い復習</option><option value="favorite">お気に入り</option></select></div>
 <div><label>開始</label><button id="start" class="primary" style="width:100%">新しく始める</button></div></div>
